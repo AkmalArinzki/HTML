@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Belajar membuat form register</h1>
+    <div>
+      <form action="contact.php" method="POST">
+        <fieldset>
+          <legend>Data pribadi</legend>
+          <div>
+            <label>Nama:</label>
+            <input type="text" name="nama" placeholder="Nama lengkap..." />
+          </div>
+          <div>
+            <label>Alamat:</label>
+            <input type="text" name="alamat" placeholder="Alamat..." />
+          </div>
+          <div>
+            <label>Jenis kelamin:</label>
+            <label
+              ><input type="radio" name="jenis_kelamin" value="Laki-laki" />
+              Laki-laki</label
+            >
+            <label
+              ><input type="radio" name="jenis_kelamin" value="perempuan" />
+              Perempuan</label
+            >
+          </div>
+          <div>
+            <label>Hobi:</label>
+            <label
+              ><input type="checkbox" name="hobi[]" value="Memasak" />
+              Memasak</label
+            >
+            <label
+              ><input type="checkbox" name="hobi[]" value="Bersepeda" />
+              Bersepeda</label
+            >
+            <label
+              ><input type="checkbox" name="hobi[]" value="Lari" /> Lari</label
+            >
+            <label
+              ><input type="checkbox" name="hobi[]" value="Panahan" />
+              Panahan</label
+            >
+            <label
+              ><input type="checkbox" name="hobi[]" value="Renang" />
+              Renang</label
+            >
+          </div>
+          <div>
+            <input type="submit" name="submit" value="Kirim" />
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  </body>
+</html>
