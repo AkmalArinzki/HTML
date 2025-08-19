@@ -1,0 +1,27 @@
+h1,
+h2,
+h3 {
+  color: blue;
+  font-family: serif;
+}
+
+p {
+  color: aqua;
+}
+
+.bg-yellow {
+  background-color: yellow;
+}
+
+#header {
+  background: grey;
+}
+
+input[type="text"] {
+  background: yellow;
+}
+
+footer {
+  color: inherit;
+  font-family: inherit;
+}

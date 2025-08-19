@@ -1,0 +1,33 @@
+header {
+  text-align: center;
+  background-color: #8b0000;
+  color: white;
+}
+
+h2 {
+  color: red;
+  padding-bottom: 5px;
+  margin: 20px 0 10px;
+}
+
+h3 {
+  color: #006400;
+  margin: 15px 0;
+}
+
+p {
+  margin-bottom: 15px;
+  text-align: justify;
+}
+
+i {
+  font-style: italic;
+  color: #b4b62c;
+}
+
+article {
+  background-color: rgba(255, 255, 255, 0.85);
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
