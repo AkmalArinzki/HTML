@@ -8,6 +8,12 @@ h3 {
 p {
   color: aqua;
 }
+body {
+  height: 100%;
+  padding: 0%;
+  background-image: url("./Screenshot\ 2025-08-20\ 112007.png");
+  background-size: 100%;
+}
 
 .bg-yellow {
   background-color: yellow;

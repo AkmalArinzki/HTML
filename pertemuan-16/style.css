@@ -1,0 +1,77 @@
+* {
+  border: 1px solid teal;
+}
+
+/* Reset default browser style (kalau mau aktifkan) */
+/* * {
+    padding: 0;
+    margin: 0;
+} */
+
+p {
+  color: blue;
+}
+
+div {
+  color: green;
+}
+
+b {
+  font-size: large;
+  color: aqua;
+}
+
+.pink {
+  color: black;
+  background: pink;
+  padding: 5px;
+  font-weight: 700;
+}
+
+.Mantap {
+  color: rgb(0, 0, 0);
+  font-size: larger;
+  background-color: aqua;
+  padding: 10px;
+}
+
+.text-white {
+  color: white;
+}
+
+.bg-teal {
+  background: teal;
+}
+
+#header {
+  background: teal;
+  color: white;
+  height: 100px;
+  padding: 50px;
+}
+
+input[type="text"] {
+  background: none;
+  color: rgb(255, 255, 255);
+  padding: 10px;
+  border: 1px solid rgb(255, 255, 255);
+  width: 500px;
+}
+
+/* Hover untuk semua <a> (kecuali yang ditimpa lebih spesifik) */
+a:hover {
+  color: teal;
+  background: white;
+  text-decoration: none;
+}
+
+/* Hover khusus untuk <a class="b"> */
+a.b:hover {
+  color: white;
+  background: red;
+  text-decoration: none;
+}
+
+p::first-line {
+  color: magenta;
+}

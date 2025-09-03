@@ -1,0 +1,12 @@
+body {
+  font-family: "Poppins", sans-serif;
+  margin: 20px;
+  line-height: 1.6;
+}
+.poppins-black-italic {
+  font-family: "Poppins", sans-serif;
+  font-weight: 900; /* Black */
+  font-style: italic;
+  color: rgb(0, 0, 160);
+  font-size: 18px;
+}

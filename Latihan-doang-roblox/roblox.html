@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Roblox Blue Theme</title>
+    <style>
+      /* Loading Screen Styles */
+      #loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg, #0a1a3a, #152a5e);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        transition: opacity 0.8s ease-out;
+      }
+
+      .loader-container {
+        width: 500px;
+        max-width: 90%;
+        background: rgba(0, 0, 50, 0.6);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 0 40px rgba(0, 200, 255, 0.5),
+          inset 0 0 25px rgba(0, 180, 255, 0.3);
+        border: 2px solid #00a8ff;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .loader-container::before {
+        content: "";
+        position: absolute;
+        top: -15px;
+        left: -15px;
+        right: -15px;
+        bottom: -15px;
+        background: linear-gradient(
+          45deg,
+          #00c8ff,
+          #0077ff,
+          #00c8ff,
+          #0077ff,
+          #00c8ff
+        );
+        z-index: -1;
+        border-radius: 25px;
+        animation: borderGlow 4s infinite linear;
+        opacity: 0.6;
+      }
+
+      @keyframes borderGlow {
+        0% {
+          opacity: 0.4;
+          filter: hue-rotate(0deg);
+        }
+        50% {
+          opacity: 0.8;
+          filter: hue-rotate(90deg);
+        }
+        100% {
+          opacity: 0.4;
+          filter: hue-rotate(0deg);
+        }
+      }
+
+      .loader-text {
+        color: #00c8ff;
+        font-size: 2.5rem;
+        margin-bottom: 30px;
+        text-shadow: 0 0 20px #00c8ff;
+        font-weight: bold;
+        letter-spacing: 2px;
+        text-align: center;
+        animation: textPulse 2s infinite ease-in-out;
+      }
+
+      @keyframes textPulse {
+        0%,
+        100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      /* Let's Go Button Styles - IMPROVED */
+      .lets-go-btn {
+        background: linear-gradient(135deg, #00c8ff, #0077ff, #00c8ff);
+        background-size: 200% 200%;
+        color: white;
+        border: none;
+        padding: 20px 60px;
+        font-size: 2rem;
+        border-radius: 60px;
+        cursor: pointer;
+        margin: 30px 0;
+        box-shadow: 0 0 30px rgba(0, 200, 255, 0.8),
+          0 0 60px rgba(0, 150, 255, 0.5),
+          inset 0 2px 4px rgba(255, 255, 255, 0.5);
+        transition: all 0.4s ease;
+        font-weight: bold;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        position: relative;
+        overflow: hidden;
+        z-index: 1;
+        animation: buttonGlow 3s infinite alternate,
+          buttonFloat 4s infinite ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 280px;
+      }
+
+      @keyframes buttonGlow {
+        0% {
+          box-shadow: 0 0 30px rgba(0, 200, 255, 0.8),
+            0 0 60px rgba(0, 150, 255, 0.5),
+            inset 0 2px 4px rgba(255, 255, 255, 0.5);
+        }
+        100% {
+          box-shadow: 0 0 40px rgba(0, 230, 255, 1),
+            0 0 80px rgba(0, 180, 255, 0.8), 0 0 120px rgba(0, 150, 255, 0.4),
+            inset 0 2px 6px rgba(255, 255, 255, 0.6);
+        }
+      }
+
+      @keyframes buttonFloat {
+        0%,
+        100% {
+          transform: translateY(0) scale(1);
+        }
+        50% {
+          transform: translateY(-10px) scale(1.03);
+        }
+      }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      .lets-go-btn:hover {
+        transform: scale(1.08) translateY(-5px);
+        animation: gradientShift 2s infinite ease,
+          buttonGlow 1s infinite alternate, buttonFloat 3s infinite ease-in-out;
+      }
+
+      .lets-go-btn:active {
+        transform: scale(0.98);
+        box-shadow: 0 0 20px rgba(0, 200, 255, 0.6),
+          inset 0 2px 4px rgba(255, 255, 255, 0.5);
+      }
+
+      .lets-go-btn::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.6),
+          transparent
+        );
+        transition: 0.5s;
+        z-index: -1;
+      }
+
+      .lets-go-btn:hover::before {
+        left: 100%;
+      }
+
+      .lets-go-btn::after {
+        content: "";
+        position: absolute;
+        top: -5px;
+        left: -5px;
+        right: -5px;
+        bottom: -5px;
+        background: linear-gradient(135deg, #00c8ff, #0077ff, #00c8ff);
+        background-size: 200% 200%;
+        z-index: -2;
+        border-radius: 65px;
+        animation: gradientShift 4s infinite ease;
+        opacity: 0.7;
+        filter: blur(15px);
+      }
+
+      .btn-sparkle {
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 50%;
+        pointer-events: none;
+        opacity: 0;
+        filter: blur(2px);
+      }
+
+      @keyframes sparkle {
+        0% {
+          transform: translate(0, 0) scale(0);
+          opacity: 0;
+        }
+        50% {
+          opacity: 1;
+        }
+        100% {
+          transform: translate(var(--tx), var(--ty)) scale(1);
+          opacity: 0;
+        }
+      }
+
+      .progress-container {
+        width: 100%;
+        margin-top: 30px;
+        display: none;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 30px;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 15px;
+        overflow: hidden;
+        position: relative;
+        box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(0, 180, 255, 0.3);
+      }
+
+      .progress-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, #0062cc, #00c8ff, #0062cc);
+        border-radius: 15px;
+        transition: width 0.5s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .progress-fill::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.5),
+          transparent
+        );
+        animation: progressShine 1.5s infinite;
+      }
+
+      @keyframes progressShine {
+        0% {
+          left: -100%;
+        }
+        100% {
+          left: 200%;
+        }
+      }
+
+      .progress-percentage {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-weight: bold;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+        font-size: 1.2rem;
+        letter-spacing: 1px;
+      }
+
+      .fullscreen-lightning {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 10000;
+        opacity: 0;
+      }
+
+      .fullscreen-bolt {
+        position: absolute;
+        width: 4px;
+        height: 0;
+        background: #00c8ff;
+        opacity: 0.9;
+        box-shadow: 0 0 30px #00c8ff, 0 0 60px #00eaff;
+        animation: fullscreen-flicker 0.2s infinite;
+        transform-origin: top center;
+        z-index: 10001;
+      }
+
+      @keyframes fullscreen-flicker {
+        0%,
+        19%,
+        21%,
+        23%,
+        25%,
+        54%,
+        56%,
+        100% {
+          opacity: 0.9;
+        }
+        20%,
+        24%,
+        55% {
+          opacity: 0.3;
+        }
+      }
+
+      @keyframes fullscreen-strike {
+        0% {
+          height: 0;
+          opacity: 0;
+          transform: translateY(-100%);
+        }
+        5% {
+          height: 40%;
+          opacity: 1;
+          transform: translateY(0);
+        }
+        10% {
+          height: 100%;
+          opacity: 1;
+        }
+        15% {
+          height: 100%;
+          opacity: 1;
+        }
+        20% {
+          height: 100%;
+          opacity: 0.8;
+        }
+        100% {
+          height: 100%;
+          opacity: 0;
+        }
+      }
+
+      .robolt {
+        position: absolute;
+        width: 120px;
+        height: 120px;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path fill="%2300c8ff" d="M65.5,38.5h-12l10-21c0.3-0.7-0.2-1.5-1-1.5c-0.3,0-0.6,0.1-0.8,0.4l-27,35c-0.5,0.6-0.3,1.5,0.3,2c0.3,0.2,0.6,0.3,0.9,0.3H45l-10,21c-0.3,0.7,0.2,1.5,1,1.5c0.3,0,0.6-0.1,0.8-0.4l27-35c0.5-0.6,0.3-1.5-0.3-2C66.3,38.6,65.9,38.5,65.5,38.5z"/></svg>')
+          center/contain no-repeat;
+        filter: drop-shadow(0 0 15px #00c8ff);
+        opacity: 0;
+        z-index: 9998;
+        animation: roboltFloat 15s infinite linear;
+      }
+
+      @keyframes roboltFloat {
+        0% {
+          top: -10%;
+          left: 5%;
+          opacity: 0;
+          transform: rotate(0deg);
+        }
+        5% {
+          opacity: 0.7;
+        }
+        25% {
+          top: 15%;
+          left: 80%;
+          transform: rotate(180deg);
+        }
+        50% {
+          top: 80%;
+          left: 60%;
+          transform: rotate(360deg);
+        }
+        75% {
+          top: 40%;
+          left: 10%;
+          transform: rotate(540deg);
+        }
+        100% {
+          top: -10%;
+          left: 5%;
+          opacity: 0;
+          transform: rotate(720deg);
+        }
+      }
+
+      /* Existing styles */
+      body {
+        margin: 0;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #1e3c72, #2a5298);
+        color: #fff;
+        text-align: center;
+        line-height: 1.6;
+        opacity: 0;
+        animation: fadeIn 1.5s forwards;
+        animation-delay: 0.5s;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      header {
+        background: rgba(0, 0, 50, 0.6);
+        padding: 20px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: 3.2rem;
+        color: #00c8ff;
+        text-shadow: 0 0 15px #00c8ff, 0 0 30px #00c8ff;
+        letter-spacing: 2px;
+      }
+
+      .hero {
+        margin-top: 40px;
+        position: relative;
+        display: inline-block;
+      }
+
+      .hero img {
+        max-width: 320px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+        border: 4px solid #00c8ff;
+        position: relative;
+        z-index: 2;
+      }
+
+      .lightning {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .bolt {
+        position: absolute;
+        width: 4px;
+        height: 100%;
+        background: #00c8ff;
+        opacity: 0.7;
+        box-shadow: 0 0 20px #00c8ff, 0 0 40px #00eaff;
+        animation: flicker 0.2s infinite, strike 2s infinite;
+      }
+
+      .bolt:nth-child(1) {
+        left: 20%;
+        animation-delay: 0s, 0s;
+      }
+
+      .bolt:nth-child(2) {
+        left: 50%;
+        animation-delay: 0.1s, 1s;
+      }
+
+      .bolt:nth-child(3) {
+        left: 80%;
+        animation-delay: 0.15s, 1.5s;
+      }
+
+      @keyframes flicker {
+        0%,
+        19%,
+        21%,
+        23%,
+        25%,
+        54%,
+        56%,
+        100% {
+          opacity: 0.8;
+        }
+        20%,
+        24%,
+        55% {
+          opacity: 0.2;
+        }
+      }
+
+      @keyframes strike {
+        0% {
+          height: 0;
+          opacity: 0;
+        }
+        10% {
+          height: 100%;
+          opacity: 1;
+        }
+        100% {
+          height: 0;
+          opacity: 0;
+        }
+      }
+
+      .content {
+        padding: 40px;
+        max-width: 1000px;
+        margin: auto;
+      }
+
+      .content h2 {
+        font-size: 2.2rem;
+        color: #00c8ff;
+        margin-bottom: 25px;
+        text-shadow: 0 0 10px #00c8ff;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        padding: 25px;
+        margin: 25px 0;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+        text-align: left;
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(0, 200, 255, 0.2);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 25px rgba(0, 0, 0, 0.6);
+      }
+
+      .card h3 {
+        color: #00eaff;
+        margin-bottom: 15px;
+        font-size: 1.5rem;
+        text-shadow: 0 0 8px #00eaff;
+      }
+
+      footer {
+        background: rgba(0, 0, 50, 0.6);
+        padding: 20px;
+        margin-top: 40px;
+        font-size: 1rem;
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.5);
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+      <!-- Floating Roblox Icons -->
+      <div
+        class="robolt"
+        style="top: 10%; left: 15%; animation-delay: 0s"
+      ></div>
+      <div
+        class="robolt"
+        style="top: 70%; left: 80%; animation-delay: 3s"
+      ></div>
+      <div class="robolt" style="top: 40%; left: 5%; animation-delay: 6s"></div>
+      <div
+        class="robolt"
+        style="top: 20%; left: 75%; animation-delay: 9s"
+      ></div>
+      <div
+        class="robolt"
+        style="top: 65%; left: 20%; animation-delay: 12s"
+      ></div>
+
+      <div class="loader-container">
+        <div class="loader-text" id="loader-text">Welcome!</div>
+
+        <!-- Centered Let's Go Button -->
+        <button class="lets-go-btn" id="lets-go-btn">Let's Go!</button>
+
+        <div class="progress-container" id="progress-container">
+          <div class="progress-bar">
+            <div class="progress-fill"></div>
+            <div class="progress-percentage">0%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fullscreen-lightning" id="fullscreen-lightning"></div>
+
+    <!-- Main Content (hidden initially) -->
+    <div id="main-content" style="display: none">
+      <header>
+        <h1>Welcome to My Roblox Website :D</h1>
+      </header>
+
+      <div class="hero">
+        <img src="unnamed.jpg" alt="Roblox Avatar" />
+        <div class="lightning">
+          <div class="bolt"></div>
+          <div class="bolt"></div>
+          <div class="bolt"></div>
+        </div>
+      </div>
+
+      <div class="content">
+        <h2>About This Website</h2>
+        <div class="card">
+          <h3>Roblox Creativity</h3>
+          <p>
+            This website is styled with a blue Roblox-inspired theme. The
+            character above represents creativity, fun, and the limitless
+            possibilities of Roblox adventures. Roblox is not just a game, but a
+            platform where imagination comes to life. Players can build worlds,
+            design outfits, and create unique games that millions of people can
+            enjoy.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Design & Theme</h3>
+          <p>
+            Designed with simplicity and elegance, the theme uses gradients,
+            glowing blue highlights, and modern card layouts to make the page
+            visually appealing. Every element of this website was crafted with a
+            Roblox spirit in mind — fun, dynamic, and customizable. The blue
+            color scheme was chosen to reflect the cool and futuristic vibe that
+            represents the Roblox universe.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Roblox Community</h3>
+          <p>
+            One of the best parts about Roblox is the community. Millions of
+            players from around the world connect, collaborate, and compete
+            every single day. Whether you're into roleplay, obby challenges,
+            simulators, or battle arenas, there's always something new waiting
+            for you. This website is also a tribute to that global community
+            spirit — a place where everyone is welcome and creativity has no
+            limits.
+          </p>
+        </div>
+
+        <div class="card">
+          <h3>Endless Possibilities</h3>
+          <p>
+            Roblox is more than just playing games — it's about creating
+            experiences. With Roblox Studio, players can build their own games,
+            design their own clothing, and even create interactive experiences.
+            The possibilities are truly endless. From scripting unique game
+            mechanics to designing custom maps, everything is possible if you
+            let your imagination run free.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const loadingScreen = document.getElementById("loading-screen");
+        const letsGoBtn = document.getElementById("lets-go-btn");
+        const progressContainer = document.getElementById("progress-container");
+        const progressFill = document.querySelector(".progress-fill");
+        const progressPercentage = document.querySelector(
+          ".progress-percentage"
+        );
+        const fullscreenLightning = document.getElementById(
+          "fullscreen-lightning"
+        );
+        const mainContent = document.getElementById("main-content");
+        const loaderText = document.getElementById("loader-text"); // Added reference to loader text
+
+        // Show the Let's Go button initially
+        letsGoBtn.style.display = "flex";
+        progressContainer.style.display = "none";
+
+        // Create sparkle effects
+        function createSparkles() {
+          for (let i = 0; i < 15; i++) {
+            const sparkle = document.createElement("div");
+            sparkle.className = "btn-sparkle";
+            sparkle.style.setProperty("--tx", Math.random() * 100 - 50 + "px");
+            sparkle.style.setProperty("--ty", Math.random() * 100 - 50 + "px");
+            sparkle.style.left = Math.random() * 100 + "%";
+            sparkle.style.top = Math.random() * 100 + "%";
+            sparkle.style.animation = `sparkle ${
+              0.5 + Math.random() * 1
+            }s forwards`;
+            sparkle.style.animationDelay = Math.random() * 2 + "s";
+            sparkle.style.width = sparkle.style.height =
+              5 + Math.random() * 10 + "px";
+            letsGoBtn.appendChild(sparkle);
+
+            // Remove sparkle after animation completes
+            setTimeout(() => {
+              if (sparkle.parentNode) {
+                sparkle.parentNode.removeChild(sparkle);
+              }
+            }, 3000);
+          }
+        }
+
+        // Initial sparkles
+        createSparkles();
+
+        // Continuous sparkles
+        setInterval(createSparkles, 300);
+
+        // When Let's Go button is clicked
+        letsGoBtn.addEventListener("click", function () {
+          // Hide button and show progress bar
+          letsGoBtn.style.display = "none";
+          progressContainer.style.display = "block";
+
+          // Start loading process
+          let progress = 0;
+          const targetProgress = 100;
+          const duration = 3500; // 3.5 seconds loading time
+          const intervalTime = 30;
+          const increment = (targetProgress / duration) * intervalTime;
+
+          // Simulate loading progress
+          const loadingInterval = setInterval(() => {
+            progress += increment;
+            if (progress >= targetProgress) {
+              progress = targetProgress;
+              clearInterval(loadingInterval);
+
+              // Change text to "Success!" when progress reaches 100%
+              loaderText.textContent = "Success!";
+              loaderText.style.color = "#4cff00"; // Change to green color
+              loaderText.style.textShadow = "0 0 20px #4cff00"; // Green glow
+
+              // Show lightning effect when loading completes
+              showLightningEffect();
+
+              // Hide loading screen after a delay
+              setTimeout(() => {
+                loadingScreen.style.opacity = "0";
+                setTimeout(() => {
+                  loadingScreen.style.display = "none";
+                  mainContent.style.display = "block";
+                }, 800);
+              }, 2000);
+            }
+
+            // Update progress bar
+            progressFill.style.width = progress + "%";
+            progressPercentage.textContent = Math.round(progress) + "%";
+          }, intervalTime);
+        });
+
+        function showLightningEffect() {
+          // Make lightning container visible
+          fullscreenLightning.style.opacity = "1";
+
+          // Create multiple lightning bolts (more than before)
+          for (let i = 0; i < 12; i++) {
+            createBolt(i);
+          }
+
+          // Add screen flash effect
+          const flash = document.createElement("div");
+          flash.style.position = "fixed";
+          flash.style.top = "0";
+          flash.style.left = "0";
+          flash.style.width = "100%";
+          flash.style.height = "100%";
+          flash.style.background = "rgba(255, 255, 255, 0.9)";
+          flash.style.zIndex = "9999";
+          flash.style.opacity = "0";
+          flash.style.animation = "flash 0.3s ease-out";
+          document.body.appendChild(flash);
+
+          // Remove flash after animation
+          setTimeout(() => {
+            document.body.removeChild(flash);
+          }, 500);
+
+          // Remove lightning after effect completes
+          setTimeout(() => {
+            fullscreenLightning.style.opacity = "0";
+            setTimeout(() => {
+              fullscreenLightning.innerHTML = "";
+            }, 1000);
+          }, 2500);
+        }
+
+        function createBolt(index) {
+          const bolt = document.createElement("div");
+          bolt.className = "fullscreen-bolt";
+
+          // Random position
+          const left = 5 + Math.random() * 90;
+          bolt.style.left = left + "%";
+
+          // Random width
+          const width = 3 + Math.random() * 5;
+          bolt.style.width = width + "px";
+
+          // Random color variation
+          const hueRotate = Math.random() * 360;
+          bolt.style.filter = `hue-rotate(${hueRotate}deg) blur(0.5px)`;
+
+          // Animation with random delay and duration
+          const delay = index * 0.15 + Math.random() * 0.3;
+          const duration = 0.3 + Math.random() * 0.4;
+          bolt.style.animation = `fullscreen-flicker 0.2s infinite, fullscreen-strike ${duration}s forwards`;
+          bolt.style.animationDelay = `0s, ${delay}s`;
+
+          fullscreenLightning.appendChild(bolt);
+        }
+
+        // Add CSS for flash animation
+        const style = document.createElement("style");
+        style.textContent = `
+          @keyframes flash {
+            0% { opacity: 0; }
+            50% { opacity: 0.8; }
+            100% { opacity: 0; }
+          }
+        `;
+        document.head.appendChild(style);
+      });
+    </script>
+  </body>
+</html>

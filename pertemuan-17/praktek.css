@@ -1,0 +1,101 @@
+p {
+  font-family: "Times New Roman", Times, serif;
+  line-height: 1.6;
+  text-align: center;
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 40px;
+  background: #fff;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo img {
+  height: 40px;
+  align-items: center;
+}
+.logo-text small {
+  font-size: 12px;
+  color: green;
+  align-items: center;
+}
+.logo-text h1 {
+  margin: 0;
+  font-size: 20px;
+  color: #00125a;
+  align-items: center;
+}
+
+nav {
+  display: flex;
+  gap: 25px;
+  align-items: center;
+}
+nav a {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  transition: 0.3s;
+  align-items: center;
+}
+nav a:hover {
+  color: #008c5a;
+}
+nav a.active {
+  font-weight: bold;
+}
+
+.btn-daftar {
+  background: #2f8a4c;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: 0.3s;
+  align-items: center;
+}
+.btn-daftar:hover {
+  background: #246b3c;
+}
+
+img {
+  width: 100%;
+  border-radius: 8px;
+  display: block;
+  margin: auto;
+  max-width: 600px;
+  align-items: center;
+}
+.Tentang,
+.Visi,
+.Misi,
+.Kontak {
+  text-align: center;
+  color: rgb(0, 120, 180);
+  margin-top: 40px;
+  align-items: center;
+}
+#visi-teks {
+  font-style: italic;
+}
+
+a[href^="mailto:"] {
+  color: rgb(0, 150, 100);
+  font-weight: bold;
+  align-items: center;
+}
+
+footer {
+  background-color: rgb(0, 60, 120);
+  color: white;
+  text-align: center;
+  padding: 15px;
+  margin-top: 40px;
+}

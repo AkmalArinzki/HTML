@@ -1,0 +1,31 @@
+body {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+}
+
+/* Font weight */
+.thin {
+  font-weight: 100; /* tipis */
+}
+
+.normal {
+  font-weight: 400; /* normal */
+}
+
+.bold {
+  font-weight: 700; /* tebal */
+}
+
+.bolder {
+  font-weight: 900; /* lebih tebal */
+}
+
+/* Tambahan styling biar kelihatan beda */
+p {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+blockquote {
+  font-style: italic;
+}

@@ -1,0 +1,55 @@
+/* selector tag untuk semua paragraf */
+p {
+  color: chartreuse;
+  text-align: justify;
+  line-height: 1.5;
+}
+
+/* selector class */
+.paragraf {
+  color: cadetblue;
+  font-size: 10px;
+  font-style: italic;
+}
+
+/* selector menggunakan id */
+#halaman_utama {
+  backdrop-filter: blur(5px);
+  padding: 5px;
+}
+
+/* selector menggunakan atribut */
+input[type="text"] {
+  border-color: aquamarine;
+  border-width: 2px;
+  border-style: solid;
+  padding: 5px;
+}
+
+/* selector menggunakan universal selector */
+* {
+  border-color: darkgreen;
+  border-radius: 10px;
+}
+
+/* selector menggunakan pseudo-class */
+a:hover {
+  color: orangered;
+  text-decoration: underline;
+}
+
+/* selector pseudo-element untuk paragraf: huruf pertama */
+p::first-letter {
+  font-size: 32px;
+  color: red;
+  font-weight: bold;
+}
+
+/* selector pseudo-element untuk h1: tambahan teks */
+h1::after {
+  content: " (selamat datang di halaman utama)";
+  font-size: 16px;
+  color: grey;
+}
+
+
