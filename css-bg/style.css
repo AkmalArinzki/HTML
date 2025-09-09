@@ -1,0 +1,31 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+header {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: aliceblue;
+  text-align: center;
+  padding: 30px;
+}
+
+/* .gradient {
+  color: aliceblue;
+  height: 400px;
+  padding: 100px;
+  text-align: center;
+  background: #1fe0c3;
+  background: linear-gradient(
+    90deg,
+    rgba(31, 224, 195, 1) 14%,
+    rgba(87, 115, 199, 1) 48%,
+    rgba(237, 83, 129, 1) 96%
+  );
+} */
+
+body {
+  background-image: url("gambar/johannes-plenio-qkfxBc2NQ18-unsplash.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
