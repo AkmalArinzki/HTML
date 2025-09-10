@@ -1,0 +1,48 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+body {
+  background-color: #e0f7fa;
+  font-family: "Poppins", "Segoe UI", Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 20px;
+  color: #333;
+  line-height: 1.7;
+}
+
+h1 {
+  text-align: center;
+  color: #00695c;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+.image-container {
+  text-align: center;
+  margin: 25px 0;
+}
+
+.image-container img {
+  width: 500px;
+  max-width: 90%;
+  border-radius: 15px;
+  display: block;
+  margin: 0 auto;
+}
+
+h2 {
+  color: #00796b;
+  margin-top: 35px;
+  margin-bottom: 15px;
+  text-align: center;
+  font-weight: 500;
+}
+
+p {
+  max-width: 900px;
+  line-height: 1.8;
+  text-align: center;
+  margin: 0 auto 20px auto;
+  font-size: 1.05em;
+  color: #444;
+  font-weight: 400;
+}
