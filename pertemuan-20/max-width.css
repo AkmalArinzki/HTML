@@ -1,0 +1,10 @@
+header {
+  width: 500px;
+  background-color: slateblue;
+  color: white;
+  padding: 8px;
+}
+
+img {
+  max-width: 100%;
+}
