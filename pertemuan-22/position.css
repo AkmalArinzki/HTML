@@ -1,0 +1,11 @@
+.inline-block {
+  background: 0 blue;
+  width: 100px;
+  height: 100px;
+  margin: 4px;
+  display: inline-block;
+}
+.relative {
+  position: relative;
+  top: 40px;
+}
