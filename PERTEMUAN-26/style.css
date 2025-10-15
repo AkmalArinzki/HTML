@@ -1,0 +1,9 @@
+#hidden {
+  visibility: hidden;
+  height: 100px;
+  background-color: red;
+}
+#none {
+  display: none;
+  background-color: ;
+}
