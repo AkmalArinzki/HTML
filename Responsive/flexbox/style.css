@@ -1,0 +1,21 @@
+html,
+body,
+#flex-container-start {
+  height: 100%;
+}
+
+#flex-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.flex-item {
+  width: 100px;
+  height: 100px;
+  margin: 4px;
+  background: #ec5453;
+  padding: 20px;
+  font-size: 60px;
+  color: white;
+  text-align: center;
+}

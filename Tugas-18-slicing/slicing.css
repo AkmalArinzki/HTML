@@ -24,12 +24,11 @@ h1 {
 }
 
 .card {
-  background: #fff;
+  background-color: #f5fcff;
   width: 300px;
   border-radius: 10px;
   text-align: left;
   padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .card h2 {

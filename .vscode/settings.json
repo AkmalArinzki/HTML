@@ -1,3 +1,15 @@
 {
-  "livePreview.defaultPreviewPath": "/list/list.html"
+  "livePreview.defaultPreviewPath": "/slicing-portfolio-akmal.html/index.html",
+
+  "smoothtype.enabled": true,
+  "smoothtype.duration": 80,
+  "smoothtype.autoReload": false,
+  "smoothtype.ignoreFiles": [],
+
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.cursorBlinking": "smooth",
+  "editor.smoothScrolling": true,
+  "editor.minimap.enabled": true,
+  "editor.fontLigatures": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
