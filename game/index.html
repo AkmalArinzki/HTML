@@ -2,12 +2,13 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>FPS Web Game</title>
+    <title>Gabut FPS Chaos</title>
     <style>
       body {
         margin: 0;
         overflow: hidden;
-        background: #000;
+        background: #87ceeb;
+        font-family: sans-serif;
       }
       canvas {
         display: block;
@@ -17,109 +18,92 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        color: white;
         font-size: 30px;
-        pointer-events: none;
-      }
-      #hud {
-        position: fixed;
-        top: 10px;
-        left: 10px;
         color: white;
-        font-size: 20px;
-        font-weight: bold;
         pointer-events: none;
       }
-      #win-screen {
+      #inventory {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0, 0, 0, 0.5);
+        padding: 10px 20px;
+        color: white;
+        font-size: 16px;
+      }
+      #death-screen {
         position: fixed;
         top: 0;
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: rgba(0, 0, 0, 0.85);
+        background: rgba(0, 0, 0, 0.8);
         color: white;
         display: none;
         align-items: center;
         justify-content: center;
         flex-direction: column;
         font-size: 40px;
-        font-family: Arial;
-        z-index: 99;
+        z-index: 100;
       }
-      #win-screen button {
-        padding: 10px 20px;
+      #death-screen button {
         margin-top: 20px;
-        font-size: 20px;
+        font-size: 24px;
+        padding: 10px 20px;
         cursor: pointer;
       }
     </style>
   </head>
   <body>
     <div id="crosshair">+</div>
-    <div id="hud">Shoot: 0</div>
-
-    <div id="win-screen">
-      <div id="win-text">MENANG!</div>
-      <button onclick="restartGame()">Main Lagi</button>
+    <div id="inventory">Inventory: Tembakan</div>
+    <div id="death-screen">
+      <div>Kamu Mati!</div>
+      <button onclick="respawnPlayer()">Respawn</button>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
     <script>
-      // --------------------------------------------------
-      //  BASIC SETUP
-      // --------------------------------------------------
-      let scene = new THREE.Scene();
-      let camera = new THREE.PerspectiveCamera(
+      // ------------------- SCENE -------------------
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x87ceeb);
+      const camera = new THREE.PerspectiveCamera(
         75,
         window.innerWidth / window.innerHeight,
         0.1,
         1000
       );
+      camera.position.set(0, 2, 10);
 
-      let renderer = new THREE.WebGLRenderer({ antialias: true });
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.body.appendChild(renderer.domElement);
 
-      camera.position.y = 2;
+      // LIGHT
+      scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+      const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
+      dirLight.position.set(10, 20, 10);
+      scene.add(dirLight);
 
-      // floor
-      let floor = new THREE.Mesh(
-        new THREE.BoxGeometry(100, 1, 100),
-        new THREE.MeshBasicMaterial({ color: 0x333333 })
+      // FLOOR
+      const floor = new THREE.Mesh(
+        new THREE.BoxGeometry(200, 1, 200),
+        new THREE.MeshStandardMaterial({ color: 0x228b22 })
       );
-      floor.position.y = -1;
+      floor.position.y = -0.5;
       scene.add(floor);
 
-      // --------------------------------------------------
-      // HUD VARIABLES
-      // --------------------------------------------------
-      let shootCount = 0;
-      let killCount = 0;
-
-      const hud = document.getElementById("hud");
-      const winScreen = document.getElementById("win-screen");
-
-      function updateHUD() {
-        hud.textContent = `Shoot: ${shootCount}`;
-      }
-
-      // --------------------------------------------------
-      // PLAYER MOVEMENT
-      // --------------------------------------------------
-      let keys = {};
-
+      // ------------------- PLAYER -------------------
+      const keys = {};
       document.addEventListener("keydown", (e) => (keys[e.key] = true));
       document.addEventListener("keyup", (e) => (keys[e.key] = false));
+      document.body.addEventListener("click", () =>
+        document.body.requestPointerLock()
+      );
 
-      document.body.addEventListener("click", () => {
-        document.body.requestPointerLock();
-        shootGun();
-      });
-
-      let pitch = 0;
-      let yaw = 0;
-
+      let yaw = 0,
+        pitch = 0;
       document.addEventListener("mousemove", (e) => {
         if (document.pointerLockElement === document.body) {
           yaw -= e.movementX * 0.002;
@@ -128,120 +112,325 @@
         }
       });
 
-      // --------------------------------------------------
-      // GUN (simple block)
-      // --------------------------------------------------
-      let gun = new THREE.Mesh(
-        new THREE.BoxGeometry(0.3, 0.2, 1),
-        new THREE.MeshBasicMaterial({ color: 0x8888ff })
-      );
-      gun.position.set(0.3, -0.2, -0.8);
-      camera.add(gun);
-      scene.add(camera);
+      let velocityY = 0,
+        onGround = true,
+        playerAlive = true;
 
-      // --------------------------------------------------
-      // ENEMIES
-      // --------------------------------------------------
-      let enemies = [];
-
-      function spawnEnemy() {
-        let enemy = new THREE.Mesh(
-          new THREE.BoxGeometry(1, 2, 1),
-          new THREE.MeshBasicMaterial({ color: 0xff0000 })
-        );
-        enemy.position.set(
-          Math.random() * 60 - 30,
+      // ------------------- NPC -------------------
+      const npcs = [],
+        npcCount = 30,
+        bullets = [],
+        bloodMeshes = [];
+      function createNPC(x, z) {
+        const npc = new THREE.Group();
+        npc.alive = true;
+        npc.state = "walk";
+        npc.stateCooldown = Math.floor(Math.random() * 200) + 100;
+        npc.velocity = new THREE.Vector3(
+          (Math.random() - 0.5) * 0.05,
           0,
-          Math.random() * -40 - 10
+          (Math.random() - 0.5) * 0.05
         );
-        enemy.health = 1;
-        scene.add(enemy);
-        enemies.push(enemy);
+        npc.position.set(x, 0, z);
+        npc.alertMesh = null;
+
+        // BODY
+        const body = new THREE.Mesh(
+          new THREE.BoxGeometry(0.8, 1.2, 0.4),
+          new THREE.MeshStandardMaterial({ color: 0xffaa00 })
+        );
+        body.position.y = 1.1;
+        npc.add(body);
+        const head = new THREE.Mesh(
+          new THREE.BoxGeometry(0.8, 0.8, 0.8),
+          new THREE.MeshStandardMaterial({ color: 0xffccaa })
+        );
+        head.position.y = 2.2;
+        npc.add(head);
+        const armL = new THREE.Mesh(
+          new THREE.BoxGeometry(0.2, 1, 0.2),
+          new THREE.MeshStandardMaterial({ color: 0xffaa00 })
+        );
+        armL.position.set(-0.5, 1.6, 0);
+        npc.add(armL);
+        const armR = new THREE.Mesh(
+          new THREE.BoxGeometry(0.2, 1, 0.2),
+          new THREE.MeshStandardMaterial({ color: 0xffaa00 })
+        );
+        armR.position.set(0.5, 1.6, 0);
+        npc.add(armR);
+        const legL = new THREE.Mesh(
+          new THREE.BoxGeometry(0.3, 1, 0.3),
+          new THREE.MeshStandardMaterial({ color: 0x3333ff })
+        );
+        legL.position.set(-0.2, 0.5, 0);
+        npc.add(legL);
+        const legR = new THREE.Mesh(
+          new THREE.BoxGeometry(0.3, 1, 0.3),
+          new THREE.MeshStandardMaterial({ color: 0x3333ff })
+        );
+        legR.position.set(0.2, 0.5, 0);
+        npc.add(legR);
+
+        scene.add(npc);
+        npcs.push(npc);
+      }
+      for (let i = 0; i < npcCount; i++) {
+        createNPC((Math.random() - 0.5) * 180, (Math.random() - 0.5) * 180);
       }
 
-      function spawnWave() {
-        for (let i = 0; i < 5; i++) spawnEnemy();
-      }
-
-      spawnWave();
-
-      // --------------------------------------------------
-      // SHOOT MECHANIC
-      // --------------------------------------------------
-      const raycaster = new THREE.Raycaster();
-
+      // ------------------- SHOOT -------------------
+      document.addEventListener("click", shootGun);
       function shootGun() {
-        shootCount++;
-        updateHUD();
-
-        raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
-        let hits = raycaster.intersectObjects(enemies);
-
-        if (hits.length > 0) {
-          let target = hits[0].object;
-          killEnemy(target);
-        }
+        if (!playerAlive) return;
+        const bullet = new THREE.Mesh(
+          new THREE.SphereGeometry(0.1, 8, 8),
+          new THREE.MeshStandardMaterial({ color: 0xffff00 })
+        );
+        bullet.position.set(
+          camera.position.x,
+          camera.position.y,
+          camera.position.z
+        );
+        const direction = new THREE.Vector3(0, 0, -1).applyEuler(
+          camera.rotation
+        );
+        bullet.userData = { dir: direction, life: 100, owner: "player" };
+        scene.add(bullet);
+        bullets.push(bullet);
       }
 
-      function killEnemy(enemy) {
-        scene.remove(enemy);
-        enemies = enemies.filter((e) => e !== enemy);
+      // ------------------- PLAYER DEATH -------------------
+      const deathScreen = document.getElementById("death-screen");
+      function playerDie() {
+        playerAlive = false;
+        deathScreen.style.display = "flex";
+      }
+      function respawnPlayer() {
+        playerAlive = true;
+        camera.position.set(0, 2, 10);
+        yaw = pitch = 0;
+        deathScreen.style.display = "none";
 
-        killCount++;
+        // reset NPC
+        npcs.forEach((npc) => {
+          npc.alive = true;
+          npc.state = "walk";
+          npc.stateCooldown = Math.floor(Math.random() * 200) + 100;
+          npc.position.set(
+            (Math.random() - 0.5) * 180,
+            0,
+            (Math.random() - 0.5) * 180
+          );
+          if (npc.alertMesh) {
+            scene.remove(npc.alertMesh);
+            npc.alertMesh = null;
+          }
+        });
 
-        if (killCount >= 20) showWinScreen();
+        // hapus darah
+        bloodMeshes.forEach((b) => scene.remove(b));
+        bloodMeshes.length = 0;
 
-        // respawn enemy
-        spawnEnemy();
+        // hapus peluru
+        bullets.forEach((b) => scene.remove(b));
+        bullets.length = 0;
       }
 
-      // --------------------------------------------------
-      // WIN SCREEN
-      // --------------------------------------------------
-      function showWinScreen() {
-        winScreen.style.display = "flex";
-      }
-
-      function restartGame() {
-        winScreen.style.display = "none";
-
-        shootCount = 0;
-        killCount = 0;
-        updateHUD();
-
-        // remove old enemies
-        enemies.forEach((e) => scene.remove(e));
-        enemies = [];
-
-        spawnWave();
-      }
-
-      // --------------------------------------------------
-      // GAME LOOP
-      // --------------------------------------------------
+      // ------------------- GAME LOOP -------------------
       function animate() {
         requestAnimationFrame(animate);
 
-        let speed = 0.1;
-        let dir = new THREE.Vector3();
+        if (playerAlive) {
+          const dir = new THREE.Vector3();
+          if (keys["w"] || keys["ArrowUp"]) dir.z -= 1;
+          if (keys["s"] || keys["ArrowDown"]) dir.z += 1;
+          if (keys["a"] || keys["ArrowLeft"]) dir.x -= 1;
+          if (keys["d"] || keys["ArrowRight"]) dir.x += 1;
+          dir.applyAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
+          camera.position.addScaledVector(dir, 0.3);
 
-        if (keys["w"]) dir.z -= 1;
-        if (keys["s"]) dir.z += 1;
-        if (keys["a"]) dir.x -= 1;
-        if (keys["d"]) dir.x += 1;
-
-        dir.applyAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
-        camera.position.addScaledVector(dir, speed);
+          if (keys[" "] && onGround) {
+            velocityY = 0.3;
+            onGround = false;
+          }
+          velocityY -= 0.02;
+          camera.position.y += velocityY;
+          if (camera.position.y < 2) {
+            camera.position.y = 2;
+            velocityY = 0;
+            onGround = true;
+          }
+        }
 
         camera.rotation.order = "YXZ";
         camera.rotation.y = yaw;
         camera.rotation.x = pitch;
 
-        // Enemy AI (they slowly walk toward you)
-        enemies.forEach((enemy) => {
-          let vec = new THREE.Vector3();
-          vec.subVectors(camera.position, enemy.position).normalize();
-          enemy.position.addScaledVector(vec, 0.02);
+        // BULLETS
+        bullets.forEach((b, i) => {
+          b.position.addScaledVector(b.userData.dir, 0.5);
+          b.userData.life--;
+          if (b.userData.life <= 0) {
+            scene.remove(b);
+            bullets.splice(i, 1);
+            return;
+          }
+
+          // collision NPC
+          if (b.userData.owner === "player") {
+            npcs.forEach((npc) => {
+              if (!npc.alive) return;
+              if (npc.position.distanceTo(b.position) < 1) {
+                npc.alive = false;
+
+                // posisi tiduran
+                npc.rotation.x = -Math.PI / 2;
+                npc.position.y = 0.1;
+
+                // darah banyak
+                for (let j = 0; j < 10; j++) {
+                  const blood = new THREE.Mesh(
+                    new THREE.BoxGeometry(0.3, 0.3, 0.3),
+                    new THREE.MeshStandardMaterial({ color: 0xff0000 })
+                  );
+                  blood.position.set(
+                    npc.position.x + (Math.random() - 0.5) * 1,
+                    npc.position.y + 0.5 + Math.random() * 1,
+                    npc.position.z + (Math.random() - 0.5) * 1
+                  );
+                  scene.add(blood);
+                  bloodMeshes.push(blood);
+                }
+
+                // NPC takut
+                npcs.forEach((npc2) => {
+                  if (npc2.alive) npc2.state = "fear";
+                });
+
+                // respawn
+                setTimeout(() => {
+                  npc.position.set(
+                    (Math.random() - 0.5) * 180,
+                    0,
+                    (Math.random() - 0.5) * 180
+                  );
+                  npc.rotation.set(0, 0, 0);
+                  npc.alive = true;
+                  npc.state = "walk";
+                  bloodMeshes.forEach((blood) => scene.remove(blood));
+                  bloodMeshes.length = 0;
+                }, 10000);
+
+                // NPC angry
+                npcs.forEach((npc2) => {
+                  if (npc2.alive) npc2.state = "angry";
+                });
+
+                scene.remove(b);
+                bullets.splice(i, 1);
+              }
+            });
+          }
+        });
+
+        // NPC behavior
+        npcs.forEach((npc) => {
+          if (!npc.alive) return;
+
+          npc.stateCooldown--;
+          if (npc.stateCooldown <= 0 && npc.state !== "angry") {
+            const states = ["walk", "chat", "sleep", "jump"];
+            npc.state = states[Math.floor(Math.random() * states.length)];
+            npc.stateCooldown = Math.floor(Math.random() * 200) + 100;
+          }
+
+          if (npc.state === "walk") {
+            npc.position.add(npc.velocity);
+            if (Math.random() < 0.01) {
+              npc.velocity.x = (Math.random() - 0.5) * 0.05;
+              npc.velocity.z = (Math.random() - 0.5) * 0.05;
+            }
+          } else if (npc.state === "chat") {
+            npc.rotation.y += (Math.random() - 0.5) * 0.05;
+          } else if (npc.state === "sleep") {
+            npc.position.y = 0;
+          } else if (npc.state === "jump") {
+            npc.position.y = 1 + Math.sin(Date.now() * 0.01) * 0.5;
+          } else if (npc.state === "fear") {
+            const vec = new THREE.Vector3()
+              .subVectors(npc.position, camera.position)
+              .normalize()
+              .multiplyScalar(0.1);
+            npc.position.add(vec);
+          } else if (npc.state === "angry") {
+            // chase player
+            const vec = new THREE.Vector3()
+              .subVectors(camera.position, npc.position)
+              .normalize()
+              .multiplyScalar(0.05);
+            npc.position.add(vec);
+
+            // tanda seru
+            if (!npc.alertMesh) {
+              const alert = new THREE.Mesh(
+                new THREE.BoxGeometry(0.3, 0.3, 0.1),
+                new THREE.MeshStandardMaterial({ color: 0xff0000 })
+              );
+              alert.position.set(
+                npc.position.x,
+                npc.position.y + 3,
+                npc.position.z
+              );
+              scene.add(alert);
+              npc.alertMesh = alert;
+            } else {
+              npc.alertMesh.position.set(
+                npc.position.x,
+                npc.position.y + 3,
+                npc.position.z
+              );
+            }
+
+            if (npc.position.distanceTo(camera.position) < 5 && playerAlive) {
+              const bullet = new THREE.Mesh(
+                new THREE.SphereGeometry(0.1, 8, 8),
+                new THREE.MeshStandardMaterial({ color: 0xff00ff })
+              );
+              bullet.position.set(
+                npc.position.x,
+                npc.position.y + 1,
+                npc.position.z
+              );
+              const dir = new THREE.Vector3()
+                .subVectors(camera.position, npc.position)
+                .normalize();
+              bullet.userData = { dir: dir, life: 100, owner: "npc" };
+              scene.add(bullet);
+              bullets.push(bullet);
+            }
+          }
+
+          if (npc.position.x < -100 || npc.position.x > 100)
+            npc.velocity.x *= -1;
+          if (npc.position.z < -100 || npc.position.z > 100)
+            npc.velocity.z *= -1;
+        });
+
+        // cek peluru NPC kena player
+        bullets.forEach((b, i) => {
+          if (b.userData.owner === "npc" && playerAlive) {
+            const dist = new THREE.Vector3(
+              camera.position.x,
+              camera.position.y,
+              camera.position.z
+            ).distanceTo(b.position);
+            if (dist < 1) {
+              playerDie();
+              scene.remove(b);
+              bullets.splice(i, 1);
+            }
+          }
         });
 
         renderer.render(scene, camera);
