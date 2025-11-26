@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Kartu Profil Mini Magang</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f9f9f9;
+        padding: 20px;
+      }
+
+      .card {
+        width: 270px;
+        background-color: rgb(199, 199, 199);
+        padding: 18px;
+        border-radius: 12px;
+        margin: auto;
+        text-align: center;
+        cursor: pointer;
+        position: relative;
+      }
+
+      .card:hover {
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        transform: scale(1.03);
+        transition: 0.3s;
+      }
+
+      .card:active {
+        transform: scale(0.97);
+      }
+
+      .foto {
+        width: 100px;
+        height: 100px;
+        background: #d0d0d0;
+        border-radius: 50px;
+        overflow: hidden;
+        margin: auto;
+      }
+
+      .foto img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+      }
+
+      .name {
+        font-size: 20px;
+        font-weight: bold;
+        margin-top: 12px;
+      }
+
+      .impian {
+        font-size: 15px;
+        margin-bottom: 10px;
+      }
+
+      .deskripsi {
+        font-size: 14px;
+        color: #333;
+        text-align: justify;
+      }
+
+      .deskripsi::first-letter {
+        font-size: 25px;
+        font-weight: bold;
+        color: #000000;
+      }
+
+      .deskripsi::first-line {
+        font-weight: bold;
+      }
+      .card::before {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        color: gold;
+        font-size: 20px;
+      }
+
+      .card::after {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        font-size: 10px;
+        color: #444;
+      }
+
+      .name:focus {
+        background: #e0f0ff;
+      }
+      .impian2 {
+        font-size: 15px;
+        margin-bottom: 10px;
+        font-size: 30px;
+        margin-bottom: 50px;
+      }
+      .hr {
+        border: none;
+        height: 2px;
+        background-color: #333;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="foto">
+        <img src="" alt="" />
+      </div>
+
+      <div class="name">Muhammad Akmal Arinzki</div>
+
+      <div class="impian">
+        <p>Impian:</p>
+      </div>
+      <div class="impian2">
+        <hr class="hr" />
+        <p>Hafizh Qur'an</p>
+        <hr class="hr" />
+      </div>
+
+      <p class="deskripsi">
+        impian ana adalah menjadi seorang hafizh Qur’an yang mampu menjaga,
+        memahami, dan mengamalkan setiap ayat dengan penuh keikhlasan. Ana ingin
+        menempuh jalan ini dengan disiplin, kesungguhan, dan hati yang selalu
+        dekat dengan Allah. Dengan menjadi hafizh Qur’an, ana berharap dapat
+        memberi manfaat bagi keluarga, umat, dan diri sendiri. Semoga Allah
+        memudahkan setiap langkah ana dalam meraih cita-cita mulia ini.
+      </p>
+    </div>
+  </body>
+</html>
