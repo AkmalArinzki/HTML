@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Poster Tugas Praktek</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background: linear-gradient(130deg, #8ae5ff, #6a9dff);
+      }
+      @keyframes keatas {
+        from {
+          opacity: 0;
+          transform: translateY(25px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes byng {
+        0%,
+        100% {
+          box-shadow: 0 10px 18px rgba(0, 0, 0, 0.25);
+        }
+        50% {
+          box-shadow: 0 14px 26px rgba(0, 0, 0, 0.33);
+        }
+      }
+      .kotakPoster {
+        width: 350px;
+        padding: 28px;
+        border-radius: 18px;
+        background: rgba(255, 255, 255, 0.18);
+        text-align: center;
+        box-shadow: 0 10px 18px rgba(0, 0, 0, 0.25);
+        animation: byng 2.3s infinite;
+        transform: rotate(4deg);
+        transition: 0.4s;
+      }
+      @keyframes KH {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      h3 {
+        animation: KH 1.2s infinite;
+      }
+
+      .kotakPoster:hover {
+        transform: scale(1.05);
+      }
+
+      h1 {
+        font-size: 32px;
+        color: #e8f8ff;
+        margin-bottom: 12px;
+        animation: keatas 0.9s ease forwards;
+        transition: 0.4s;
+      }
+      h1:hover {
+        color: #39b5ff;
+      }
+
+      h3 {
+        font-size: 1.1rem;
+        color: #ff2b2b;
+        margin-bottom: 18px;
+      }
+
+      p {
+        font-size: 0.98rem;
+        color: #def6ff;
+        margin-bottom: 22px;
+        line-height: 1.4;
+      }
+
+      .tmbl {
+        display: inline-block;
+        padding: 9px 22px;
+        background: #6ba6ff;
+        color: white;
+        border-radius: 18px;
+        cursor: pointer;
+        text-decoration: none;
+        margin: 0 4px;
+        transition: all 0.3s ease;
+      }
+
+      .tmbl:hover {
+        background: #39b5ff;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="kotakPoster">
+      <h1>My Motivation Life</h1>
+      <h3>Bangkit🔥💪</h3>
+      <p>"Gagal itu pelajaran<br />bukan alasan untuk meninggalkan impian"</p>
+
+      <div class="tmbl">Like💙</div>
+      <div class="tmbl">Save💾</div>
+    </div>
+  </body>
+</html>
